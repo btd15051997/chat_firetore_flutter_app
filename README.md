@@ -1,6 +1,6 @@
 # chatfiretoreflutterapp
 
-A new Flutter application.
+AppChatWithFiretore(Flutter)
 
 ## Getting Started
 
