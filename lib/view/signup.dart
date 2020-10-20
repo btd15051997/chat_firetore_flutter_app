@@ -1,9 +1,20 @@
+
 import 'package:chatfiretoreflutterapp/control/control.dart';
+import 'package:chatfiretoreflutterapp/control/progress_snackbar.dart';
+import 'package:chatfiretoreflutterapp/helper/authenticate.dart';
+import 'package:chatfiretoreflutterapp/helper/helperfunctions.dart';
+import 'package:chatfiretoreflutterapp/service/auth.dart';
+import 'package:chatfiretoreflutterapp/service/database.dart';
+import 'package:chatfiretoreflutterapp/view/chatroom_screen.dart';
 import 'package:chatfiretoreflutterapp/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
+
+  final Function toggle;
+  SignUp(this.toggle);
+
   @override
   State<StatefulWidget> createState() => _SignUpState();
 }
@@ -11,19 +22,46 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
 
   bool isLoading = false ;
+  dynamic navigateAfterSeconds = Authenticate();
+  AuthMethods authMethods = new AuthMethods();
+  ShowProgressAndSnackBar showProgressAndSnackBar = ShowProgressAndSnackBar();
 
   final formKey = GlobalKey<FormState>();
   TextEditingController _editingControllerEmail = TextEditingController();
   TextEditingController _editingControllerPass = TextEditingController();
   TextEditingController _editingControllerName = TextEditingController();
+  DatabaseMethods databaseMethods = DatabaseMethods();
 
   signUpNow(){
+
   if(formKey.currentState.validate()){
     setState(() {
       isLoading = true;
     });
-  }
 
+    if(isLoading){
+      showProgressAndSnackBar.showAlertDialog(context,"Loading...");
+
+      /*Save info usser to sharedpreference*/
+      HelperFunctions.saveUserLoggedInSharedPreference(true);
+      HelperFunctions.saveUserNameInSharedPreference(_editingControllerName.text.toString());
+      HelperFunctions.saveUserEmailInSharedPreference(_editingControllerEmail.text.toString());
+
+      /*Add to database Firetore*/
+      authMethods.signUpWithEmailAndPassword(_editingControllerEmail.text.trim(), _editingControllerPass.text.trim())
+          .then((val) {
+        if(val.toString() != null){
+          /*Get uid*/
+          databaseMethods.addUserToFiretore(_editingControllerName.text.toString(), _editingControllerEmail.text.toString());
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => ChatRoom()
+          ));
+
+        }
+      });
+
+    }
+  }
   }
   @override
   Widget build(BuildContext context) {
@@ -31,8 +69,10 @@ class _SignUpState extends State<SignUp> {
       appBar: appBarMain(context),
       body: Center(
         child: isLoading ? Container(
+
           child: Center(child: CircularProgressIndicator()),
-        ):SingleChildScrollView(
+
+        ) : SingleChildScrollView(
           child: Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -128,12 +168,20 @@ class _SignUpState extends State<SignUp> {
                           fontSize: 16,
                         ),
                       ),
-                      Text(
-                        "SignIn now",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          decoration: TextDecoration.underline,
+                      GestureDetector(
+                        onTap: (){
+                          widget.toggle();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 6),
+                          child: Text(
+                            "SignIn now",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
                         ),
                       )
                     ],
