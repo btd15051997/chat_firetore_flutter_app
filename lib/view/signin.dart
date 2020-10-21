@@ -63,13 +63,16 @@ class _SignInState extends State<SignIn> {
               .then((value) {
             if(val != null){
               querySnapshot = value;
-
               /*Save info usser to sharedpreference*/
               HelperFunctions.saveUserLoggedInSharedPreference(true);
               HelperFunctions.saveUserEmailInSharedPreference(
                   querySnapshot.documents[0].data["email"]);
               HelperFunctions.saveUserNameInSharedPreference(
                   querySnapshot.documents[0].data["name"]);
+
+              print("${HelperFunctions.saveUserNameInSharedPreference(
+                  querySnapshot.documents[0].data["name"])} Name Signed ${HelperFunctions.saveUserEmailInSharedPreference(
+                  querySnapshot.documents[0].data["email"])}");
 
               Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => ChatRoom()));

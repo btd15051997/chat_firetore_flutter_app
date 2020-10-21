@@ -15,7 +15,7 @@ class _SeacrhScreen extends State<SeacrhScreen> {
   var databaseMethods = DatabaseMethods();
   var _searchEdittingController = TextEditingController();
   QuerySnapshot searchSnapshot;
-  String myName ="";
+  String myName = "";
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _SeacrhScreen extends State<SeacrhScreen> {
     super.initState();
   }
 
-  getUserInfo() async{
+  getUserInfo() async {
     myName = await HelperFunctions.getUserNameInSharedPreference();
   }
 
@@ -35,26 +35,26 @@ class _SeacrhScreen extends State<SeacrhScreen> {
       });
     });
   }
+
   /*create chatroom, send user to conversation screen, pushreplacement*/
   createChatroomAndStartConversation(String userName) {
-   if(userName != myName){
-     String chatroomID = getChatRoomId(userName,myName);
-     List<String> users = [userName,myName];
-     print("Check neeee $myName : check neee2 $userName");
-     Map<String, dynamic> chatRoomMap =
-     {"users": users, "chatroomId": chatroomID};
+    if (userName != myName) {
+      String chatroomID = getChatRoomId(userName, myName);
+      List<String> users = [myName,userName];
+      print("Check neeee $myName : check neee2 $userName");
+      Map<String, dynamic> chatRoomMap = {
+        "users": users,
+        "chatroomId": chatroomID
+      };
 
-     DatabaseMethods().createChatRoom(chatroomID, chatRoomMap).then((value) {
-       if(value !=null){
-         Navigator.push(
-             context, MaterialPageRoute(builder: (context) => ConversationScreen()));
-       }
-     });
-
-   }else{
-     print("you cannot send message to yourself");
-   }
+      DatabaseMethods().createChatRoom(chatroomID, chatRoomMap);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ConversationScreen(chatRoomID: chatroomID,userNameCurrent: myName,)));
+    } else {
+      print("you cannot send message to yourself");
+    }
   }
+
   Widget searchList() {
     return searchSnapshot != null
         ? ListView.builder(
@@ -68,7 +68,8 @@ class _SeacrhScreen extends State<SeacrhScreen> {
             })
         : Container();
   }
-  Widget SearchTile({String username, String useremail}){
+
+  Widget SearchTile({String username, String useremail}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -93,10 +94,11 @@ class _SeacrhScreen extends State<SeacrhScreen> {
           GestureDetector(
             onTap: () {
               createChatroomAndStartConversation(username);
+              print("Click to conversation");
             },
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+                  color: Colors.white54, borderRadius: BorderRadius.circular(10)),
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text("Messing"),
             ),
@@ -142,7 +144,7 @@ class _SeacrhScreen extends State<SeacrhScreen> {
                               Color(0x36FFFFFF),
                               Color(0x0FFFFFFF),
                             ]),
-                            borderRadius: BorderRadius.circular(20)),
+                            borderRadius: BorderRadius.circular(25)),
                         child: CircleAvatar(
                             child:
                                 Image.asset("assets/images/search_white.png"))),
@@ -158,7 +160,7 @@ class _SeacrhScreen extends State<SeacrhScreen> {
   }
 
   getChatRoomId(String a, String b) {
-    if (a.compareTo(b)>0) {
+    if (a.compareTo(b) > 0) {
       return "$b\_$a";
     } else {
       return "$a\_$b";

@@ -13,7 +13,7 @@ InputDecoration textFieldInputDecoration(String hintText){
     hintStyle: TextStyle(color: Colors.white),
     border: OutlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.red, //this has no effect
+        color: Colors.green, //this has no effect
       ),
       borderRadius: BorderRadius.circular(20.0),
     ),
