@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatfiretoreflutterapp/demo_ui/sidebar/sidebar_layout.dart';
 import 'package:chatfiretoreflutterapp/helper/authenticate.dart';
 import 'package:chatfiretoreflutterapp/helper/helperfunctions.dart';
 import 'package:chatfiretoreflutterapp/view/chatroom_screen.dart';
@@ -9,7 +10,7 @@ void main() {
     title: 'Flutter Demo',
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
-      scaffoldBackgroundColor: Color(0xff1F1F1F),
+    //  scaffoldBackgroundColor: Colors.redAccent,
       primarySwatch: Colors.blue,
     ),
     home: MyApp(),
@@ -37,7 +38,7 @@ class _SplashView extends State<MyApp> {
         if (userIsLogged != null) {
           if (userIsLogged == true) {
             Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (BuildContext context) => ChatRoom()));
+                builder: (BuildContext context) => SideBarLayout()));
           } else {
             print("$userIsLogged : jaakdhksbdlkjasndklasdljandalw");
             navigateAfterSeconds = Authenticate();

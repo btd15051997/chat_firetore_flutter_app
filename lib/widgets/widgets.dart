@@ -3,39 +3,41 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 Widget appBarMain(BuildContext context){
-  return AppBar(title: Image.asset('assets/images/logo.png',height: 50,width: 50,),
+  return AppBar(title: Text("Chats"),
+    backgroundColor: colorMain(),
   );
 }
 
-InputDecoration textFieldInputDecoration(String hintText){
+InputDecoration textFieldInputDecoration(String hintText , isTextEmail){
   return InputDecoration(
+    prefixIcon: isTextEmail ? Icon(Icons.email,color: colorMain(),) : Icon(Icons.paste_sharp,color: colorMain(),),
     hintText: hintText,
-    hintStyle: TextStyle(color: Colors.white),
+    hintStyle: TextStyle(color: Colors.black45),
     border: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.green, //this has no effect
-      ),
       borderRadius: BorderRadius.circular(20.0),
     ),
   );
 }
 TextStyle simpleTextStyle (){
   return TextStyle(
-    color: Colors.white,
-    fontSize: 16
+    color: Colors.black,
+    fontSize: 16,
   );
   }
 
 TextStyle miniTextStyle (){
   return TextStyle(
-      color: Colors.white,
+      color: Colors.black,
       fontSize: 12
   );
+}
+Color colorMain(){
+  return Color(0xFF262AAA);
 }
 
 TextStyle mediumTextStyle (){
   return TextStyle(
-      color: Colors.white,
-      fontSize: 17
+      color: Colors.black,
+      fontSize: 12
   );
 }
